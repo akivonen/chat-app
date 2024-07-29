@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/akivonen/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/akivonen/frontend-project-12/actions)",
   "main": "index.js",
-  "workspaces": ["frontend"],
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
+    "dev": "npm run start --prefix frontend",
     "build": "npm run build --prefix frontend",
     "start": "npx start-server -s ./frontend/build"
   },
