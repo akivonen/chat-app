@@ -1,18 +1,58 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Container, Card, Form, FloatingLabel, Button,
 } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
+import getRoute from '../routes';
 import loginImg from '../assets/login.jpg';
+import { setCredentials } from '../slices/authSlice';
+
+const setToken = (data) => {
+  localStorage.setItem('userId', JSON.stringify(data));
+};
 
 const LoginPage = () => {
+  const [authFailed, setAuthFailed] = useState(false);
+  const dispatch = useDispatch();
+  const usernameRef = useRef(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    usernameRef.current.focus();
+  }, []);
+  const redirect = () => {
+    const { from } = location.state;
+    navigate(from);
+  };
+
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
-    onSubmit: (values) => {
-      console.log(JSON.stringify(values, null, 2));
+    validationSchema: Yup.object({
+      username: Yup.string().required(),
+      password: Yup.string().required(),
+    }),
+    onSubmit: async (values) => {
+      setAuthFailed(false);
+      try {
+        const response = await axios.post(getRoute.loginPath(), values);
+        setToken(response.data);
+        dispatch(setCredentials(response.data));
+        redirect();
+      } catch (err) {
+        if (err.isAxiosError && err.response.status === 401) {
+          setAuthFailed(true);
+          usernameRef.current.select();
+          return;
+        }
+        throw err;
+      }
     },
   });
   return (
@@ -35,10 +75,13 @@ const LoginPage = () => {
                       type="text"
                       name="username"
                       id="username"
+                      ref={usernameRef}
+                      isInvalid={authFailed}
                       autoComplete="username"
                       placeholder="Ваш ник"
                       required
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.username}
                     />
                   </FloatingLabel>
@@ -49,12 +92,17 @@ const LoginPage = () => {
                       type="password"
                       name="password"
                       id="password"
+                      isInvalid={authFailed}
                       autoComplete="current-password"
                       placeholder="Пароль"
                       required
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.password}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      Неверные имя пользователя или пароль
+                    </Form.Control.Feedback>
                   </FloatingLabel>
                 </Form.Group>
                 <Button type="submit" className="w-100 mb-3" variant="outline-primary">Войти</Button>
