@@ -3,8 +3,8 @@ import {
 } from 'react-router-dom';
 import { Provider, useSelector } from 'react-redux';
 import Header from './Header';
-import { LoginPage, PageNotFound, PrivatePage } from '../pages/index';
-import store from '../services/store';
+import { LoginPage, PageNotFound, ChatPage } from '../pages/index';
+import store from '../store/index';
 
 const PrivateRoute = ({ children }) => {
   const authState = useSelector((state) => state.auth);
@@ -28,7 +28,7 @@ const App = () => (
               path="/"
               element={(
                 <PrivateRoute>
-                  <PrivatePage />
+                  <ChatPage />
                 </PrivateRoute>
               )}
             />

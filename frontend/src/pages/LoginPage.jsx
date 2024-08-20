@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import getRoute from '../routes';
+import getRoute from '../http/routes';
 import loginImg from '../assets/login.jpg';
-import { setCredentials } from '../slices/authSlice';
+import { setCredentials } from '../store/slices/authSlice';
 
 const setToken = (data) => {
   localStorage.setItem('userId', JSON.stringify(data));
