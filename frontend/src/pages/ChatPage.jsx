@@ -1,22 +1,15 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import getAuthHeader from '../utils/getAuthHeader';
-import { fetchMessages, fetchChannels } from '../http/fetchData.js';
+import React from 'react';
+import { Container, Row } from 'react-bootstrap';
+import Channels from '../components/chat/Channels.jsx';
+import Messages from '../components/chat/Messages.jsx';
 
-const ChatPage = () => {
-  const dispatch = useDispatch();
-  const header = getAuthHeader();
-  useEffect(() => {
-    const fetchData = async () => {
-      dispatch(fetchMessages(header));
-      dispatch(fetchChannels(header));
-    };
-    fetchData();
-  }, [header, dispatch]);
-
-  return (
-    <p>{Object.hasOwn(header, 'Authorization') && 'content'}</p>
-  );
-};
+const ChatPage = () => (
+  <Container className="h-100 my-4 overflow-hidden rounded shadow">
+    <Row className="h-100 bg-white flex-md-row">
+      <Channels />
+      <Messages />
+    </Row>
+  </Container>
+);
 
 export default ChatPage;

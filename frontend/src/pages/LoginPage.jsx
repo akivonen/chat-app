@@ -7,15 +7,17 @@ import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import getRoute from '../http/routes';
+import { useTranslation } from 'react-i18next';
+import getRoute from '../routes';
 import loginImg from '../assets/login.jpg';
-import { setCredentials } from '../store/slices/authSlice';
+import { actions } from '../store/slices/authSlice';
 
 const setToken = (data) => {
   localStorage.setItem('userId', JSON.stringify(data));
 };
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
   const dispatch = useDispatch();
   const usernameRef = useRef(null);
@@ -43,7 +45,7 @@ const LoginPage = () => {
       try {
         const response = await axios.post(getRoute.loginPath(), values);
         setToken(response.data);
-        dispatch(setCredentials(response.data));
+        dispatch(actions.setCredentials(response.data));
         redirect();
       } catch (err) {
         if (err.isAxiosError && err.response.status === 401) {
@@ -68,7 +70,7 @@ const LoginPage = () => {
                 className="col-12 col-md-6 mt-3 mt-mb-0"
                 onSubmit={formik.handleSubmit}
               >
-                <h1 className="text-center mb-4">Войти</h1>
+                <h1 className="text-center mb-4">{t('login.title')}</h1>
                 <Form.Group className="form-floating mb-3">
                   <FloatingLabel label="Ваш ник">
                     <Form.Control
@@ -105,13 +107,13 @@ const LoginPage = () => {
                     </Form.Control.Feedback>
                   </FloatingLabel>
                 </Form.Group>
-                <Button type="submit" className="w-100 mb-3" variant="outline-primary">Войти</Button>
+                <Button type="submit" className="w-100 mb-3" variant="outline-primary">{t('login.submit')}</Button>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>Нет аккаунта? </span>
-                <a href="/signup">Регистрация</a>
+                <span>{t('login.noAccount')}</span>
+                <a href="/signup">{t('login.registration')}</a>
               </div>
             </Card.Footer>
           </Card>

@@ -1,19 +1,24 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './slices/authSlice';
-import channelsReducer, { actions as channelsActions } from './slices/channelsSlice';
-import messagesReducer, { actions as messagesActions } from './slices/messagesSlice';
+import authReducer, { actions as authActions } from './slices/authSlice';
+import uiReducer, { actions as uiActions } from './slices/uiSlice';
+import api from '../services/index';
+
+const { channelsApi, messagesApi } = api;
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    channels: channelsReducer,
-    messages: messagesReducer,
+    ui: uiReducer,
+    [channelsApi.reducerPath]: channelsApi.reducer,
+    [messagesApi.reducerPath]: messagesApi.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+    .concat([channelsApi.middleware, messagesApi.middleware]),
 });
 
-export default store;
-
 export const actions = {
-  ...channelsActions,
-  ...messagesActions,
+  ...authActions,
+  ...uiActions,
 };
+
+export default store;
