@@ -10,7 +10,6 @@ const Channels = () => {
   const { t } = useTranslation();
   const { data: channels, isLoading } = useGetChannelsQuery();
   const { activeChannelId } = useSelector((state) => state.ui);
-  console.log(activeChannelId);
   if (isLoading) {
     return <Spinner />;
   }

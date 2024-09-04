@@ -35,7 +35,7 @@ const Messages = () => {
               <Message key={m.id} message={m} />
             )) }
         </div>
-        <MessageForm />
+        <MessageForm activeChannelId={activeChannelId} />
       </div>
     </div>
   );

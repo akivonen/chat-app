@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import Spinner from '../Spinner';
 import { useAddMessageMutation } from '../../services';
 
-const MessageForm = () => {
+const MessageForm = ({ activeChannelId }) => {
   const { t } = useTranslation();
   const { username } = useSelector((state) => state.auth);
   const [addMessage, { error, isLoading }] = useAddMessageMutation();
@@ -21,7 +21,7 @@ const MessageForm = () => {
       const newMessage = {
         username,
         body,
-        channelId: '1',
+        channelId: activeChannelId,
       };
       addMessage(newMessage);
       formik.resetForm();
