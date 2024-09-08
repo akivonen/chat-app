@@ -3,6 +3,9 @@ import messagesApi from './messagesApi';
 
 export const {
   useGetChannelsQuery,
+  useAddChannelMutation,
+  useDeleteChannelMutation,
+  useUpdateChannelMutation,
 } = channelsApi;
 
 export const {

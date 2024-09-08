@@ -1,26 +1,60 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import {
+  Button, Nav, Dropdown, ButtonGroup,
+} from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { actions } from '../../store/index';
 
-const Channel = ({ channel, isActive }) => {
-  const { name, id } = channel;
+const Channel = ({ channel }) => {
+  const { t } = useTranslation();
+  const { name, id, removable } = channel;
+  const { activeChannelId } = useSelector((state) => state.ui);
+  const isActiveChannel = activeChannelId === id;
   const dispatch = useDispatch();
   const handleChangeChannel = () => (
     dispatch(actions.setActiveChannel({ id }))
   );
+  const openRemoveChannelModal = () => (
+    dispatch(actions.openModal({ type: 'removeChannel', id })));
+  const openRenameChannelModal = () => (
+    dispatch(actions.openModal({ type: 'renameChannel', id })));
+  if (!removable) {
+    return (
+      <Nav.Item className="w-100" as="li">
+        <Button
+          onClick={handleChangeChannel}
+          variant={isActiveChannel ? 'secondary' : 'light'}
+          type="button"
+          className="w-100 rounded-0 text-start"
+        >
+          <span className="me-1">#</span>
+          {name}
+        </Button>
+      </Nav.Item>
+    );
+  }
   return (
-    <li className="nav-item w-100">
-      <Button
-        onClick={handleChangeChannel}
-        variant={isActive ? 'secondary' : 'light'}
-        type="button"
-        className="w-100 rounded-0 text-start"
-      >
-        <span className="me-1">#</span>
-        {name}
-      </Button>
-    </li>
+    <Nav.Item className="w-100" as="li">
+      <Dropdown className="d-flex" as={ButtonGroup}>
+        <Button
+          onClick={handleChangeChannel}
+          variant={isActiveChannel ? 'secondary' : 'light'}
+          type="button"
+          className="w-100 rounded-0 text-start"
+        >
+          <span className="me-1">#</span>
+          {name}
+        </Button>
+        <Dropdown.Toggle variant={id === isActiveChannel ? 'secondary' : 'light'} className="flex-grow-0 dropdown-toggle-split">
+          <span className="visually-hidden">{t('channels.channelControl')}</span>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={openRemoveChannelModal}>{t('channels.remove')}</Dropdown.Item>
+          <Dropdown.Item onClick={openRenameChannelModal}>{t('channels.rename')}</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </Nav.Item>
   );
 };
 

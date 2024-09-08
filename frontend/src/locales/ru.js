@@ -17,6 +17,9 @@ export default {
     },
     channels: {
       title: 'Каналы',
+      channelControl: 'Управление каналом',
+      remove: 'Удалить',
+      rename: 'Переименовать',
     },
     messages: {
       messages_one: '{{count}} сообщений',
@@ -26,6 +29,21 @@ export default {
     },
     status: {
       loading: 'Загрузка',
+    },
+    modals: {
+      addChannel: 'Добавить канал',
+      removeChannel: 'Удалить канал',
+      renameChannel: 'Переименовать канал',
+      channelName: 'Имя канала',
+      areYouSure: 'Уверены?',
+      remove: 'Удалить',
+      cancel: 'Отменить',
+      send: 'Отправить',
+    },
+    validation: {
+      required: 'Обязательное поле',
+      minmax: 'От 3 до 20 символов',
+      channelAlreadyExists: 'Канал с таким именем уже существует',
     },
   },
 };
