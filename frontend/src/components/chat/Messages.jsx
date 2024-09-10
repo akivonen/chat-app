@@ -4,21 +4,16 @@ import { useSelector } from 'react-redux';
 import Message from './Message';
 import MessageForm from './MessageForm';
 import { useGetMessagesQuery } from '../../services';
-import Spinner from '../Spinner';
 
 const Messages = () => {
   const { t } = useTranslation();
-  const { data: channelsList, isLoading: isGettingChannels } = useGetMessagesQuery();
-  const { data: messageList, isLoading: isGettingMessages } = useGetMessagesQuery();
-  const { activeChannelId } = useSelector((state) => state.ui);
+  const { data: channelsList } = useGetMessagesQuery();
+  const { data: messageList } = useGetMessagesQuery();
+  const activeChannelId = useSelector((state) => state.ui.channels.activeChannelId);
   const activeChannel = channelsList
-    ?.filter((c) => c.id === activeChannelId);
+    ?.find((c) => c.id === activeChannelId);
   const activeChannelMsgs = messageList
     ?.filter((m) => m.channelId === activeChannelId);
-
-  if (isGettingChannels || isGettingMessages) {
-    return <Spinner />;
-  }
 
   return (
     <div className="col p-0 h-100">
@@ -27,10 +22,10 @@ const Messages = () => {
           <p className="m-0">
             <b>{activeChannel?.name}</b>
           </p>
-          <span className="text-muted">{t('messages.messages', { count: activeChannelMsgs.length })}</span>
+          <span className="text-muted">{t('messages.messages', { count: activeChannelMsgs?.length || 0 })}</span>
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5 ">
-          { activeChannelMsgs.length > 0
+          { activeChannelMsgs?.length > 0
             && activeChannelMsgs.map((m) => (
               <Message key={m.id} message={m} />
             )) }

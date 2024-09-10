@@ -1,37 +1,26 @@
 import React, { useEffect, useRef } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { actions } from '../../store';
-import Spinner from '../Spinner';
+import { useDispatch, useSelector } from 'react-redux';
 import { useAddChannelMutation, useGetChannelsQuery } from '../../services';
-
-const channelsSchema = (channelNames, t) => Yup.object({
-  name: Yup.string()
-    .trim()
-    .required(t('validation.required'))
-    .min(3, t('validation.minmax'))
-    .max(20, t('validation.minmax'))
-    .notOneOf(channelNames, t('validation.channelAlreadyExists')),
-});
+import { actions } from '../../store';
+import getChannelSchema from '../../validation';
 
 const AddChannel = () => {
-  const { data: channels, isLoading: isGettingChannels } = useGetChannelsQuery();
+  const isOpened = useSelector((state) => state.ui.modals.isOpened);
+  const dispatch = useDispatch();
+  const handleHide = () => dispatch(actions.closeModal());
+  const { data: channels } = useGetChannelsQuery();
   const channelNames = channels ? channels.map((c) => c.name) : [];
   const { t } = useTranslation();
-  const { modalIsOpened, modalType } = useSelector((state) => state.ui);
-  const dispatch = useDispatch();
-  const handleShow = modalIsOpened && modalType === 'addChannel';
-  const handleHide = () => dispatch(actions.closeModal());
-  const [addChannel, { error: addChannelError }] = useAddChannelMutation();
+  const [addChannel] = useAddChannelMutation();
   const inputRef = useRef(null);
   const formik = useFormik({
     initialValues: {
       name: '',
     },
-    validationSchema: channelsSchema(channelNames, t),
+    validationSchema: getChannelSchema(channelNames),
     onSubmit: async ({ name }) => {
       try {
         const newChannel = { name };
@@ -40,7 +29,6 @@ const AddChannel = () => {
         handleHide();
       } catch (error) {
         console.log(error);
-        console.log(addChannelError);
       }
     },
   });
@@ -49,11 +37,8 @@ const AddChannel = () => {
       inputRef.current.focus();
     }
   }, []);
-  if (isGettingChannels) {
-    return <Spinner />;
-  }
   return (
-    <Modal show={handleShow} onHide={handleHide}>
+    <Modal show={isOpened} onHide={handleHide}>
       <Modal.Header closeButton={handleHide}>
         <Modal.Title>{t('modals.addChannel')}</Modal.Title>
       </Modal.Header>
@@ -74,7 +59,7 @@ const AddChannel = () => {
               {t('modals.channelName')}
             </Form.Label>
             <Form.Control.Feedback type="invalid">
-              {formik.errors.name}
+              {t(formik.errors.name)}
             </Form.Control.Feedback>
             <div className="d-flex justify-content-end">
               <Button onClick={handleHide} variant="secondary" className="me-2">{t('modals.cancel')}</Button>

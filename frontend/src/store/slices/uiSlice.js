@@ -3,15 +3,19 @@ import { createSlice } from '@reduxjs/toolkit';
 import channelsApi from '../../services/channelsApi';
 
 const initialState = {
-  activeChannelId: '1',
-  defaultChannelId: '1',
-  modalIsOpened: null,
-  modalType: null,
-  channelId: null,
+  channels: {
+    activeChannelId: '1',
+    defaultChannelId: '1',
+  },
+  modals: {
+    isOpened: false,
+    type: null,
+    channelId: null,
+  },
 };
 
 const setActiveChannel = (state, { payload: { id } }) => {
-  state.activeChannelId = id;
+  state.channels.activeChannelId = id;
 };
 
 const uiSlice = createSlice({
@@ -20,14 +24,14 @@ const uiSlice = createSlice({
   reducers: {
     setActiveChannel,
     openModal: (state, { payload: { type, id } }) => {
-      state.modalIsOpened = true;
-      state.modalType = type;
-      state.channelId = id ?? null;
+      state.modals.isOpened = true;
+      state.modals.type = type;
+      state.modals.channelId = id ?? null;
     },
     closeModal: (state) => {
-      state.modalIsOpened = false;
-      state.modalType = null;
-      state.channelId = null;
+      state.modals.isOpened = false;
+      state.modals.type = null;
+      state.modals.channelId = null;
     },
   },
   extraReducers: (builder) => {

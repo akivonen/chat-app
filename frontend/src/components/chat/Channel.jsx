@@ -9,16 +9,16 @@ import { actions } from '../../store/index';
 const Channel = ({ channel }) => {
   const { t } = useTranslation();
   const { name, id, removable } = channel;
-  const { activeChannelId } = useSelector((state) => state.ui);
+  const activeChannelId = useSelector((state) => state.ui.channels.activeChannelId);
   const isActiveChannel = activeChannelId === id;
   const dispatch = useDispatch();
   const handleChangeChannel = () => (
     dispatch(actions.setActiveChannel({ id }))
   );
   const openRemoveChannelModal = () => (
-    dispatch(actions.openModal({ type: 'removeChannel', id })));
+    dispatch(actions.openModal({ type: 'remove', id })));
   const openRenameChannelModal = () => (
-    dispatch(actions.openModal({ type: 'renameChannel', id })));
+    dispatch(actions.openModal({ type: 'rename', id })));
   if (!removable) {
     return (
       <Nav.Item className="w-100" as="li">
