@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { actions } from '../../store/index';
+import actions from '../../store/slices/actions';
 
 const Channel = ({ channel }) => {
   const { t } = useTranslation();

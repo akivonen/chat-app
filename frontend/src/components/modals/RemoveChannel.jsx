@@ -3,7 +3,7 @@ import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDeleteChannelMutation } from '../../services';
-import { actions } from '../../store';
+import actions from '../../store/slices/actions';
 
 const RemoveChannel = () => {
   const { isOpened, channelId } = useSelector((state) => state.ui.modals);

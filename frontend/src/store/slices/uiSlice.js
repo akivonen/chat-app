@@ -39,6 +39,14 @@ const uiSlice = createSlice({
       channelsApi.endpoints.addChannel.matchFulfilled,
       setActiveChannel,
     );
+    builder.addMatcher(
+      channelsApi.endpoints.deleteChannel.matchFulfilled,
+      (state, { payload: { id } }) => {
+        if (state.channels.activeChannelId === id) {
+          state.channels.activeChannelId = state.channels.defaultChannelId;
+        }
+      },
+    );
   },
 });
 

@@ -4,7 +4,7 @@ import { BsPlusSquare } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
 import Channel from './Channel';
 import { useGetChannelsQuery } from '../../services';
-import { actions } from '../../store';
+import actions from '../../store/slices/actions';
 
 const Channels = () => {
   const { t } = useTranslation();

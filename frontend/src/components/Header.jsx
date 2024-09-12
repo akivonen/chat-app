@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navbar, Container, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions } from '../store';
+import actions from '../store/slices/actions.js';
 
 const Header = () => {
   const { t } = useTranslation();

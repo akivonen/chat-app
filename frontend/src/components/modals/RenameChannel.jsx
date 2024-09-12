@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetChannelsQuery, useUpdateChannelMutation } from '../../services';
-import { actions } from '../../store';
+import actions from '../../store/slices/actions';
 import getChannelSchema from '../../validation';
 
 const RenameChannel = () => {

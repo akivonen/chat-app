@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import getRoute from '../routes';
 import loginImg from '../assets/login.jpg';
-import { actions } from '../store/slices/authSlice';
+import actions from '../store/slices/actions';
 
 const setToken = (data) => {
   localStorage.setItem('userId', JSON.stringify(data));
