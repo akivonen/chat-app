@@ -7,8 +7,26 @@ export default {
     login: {
       title: 'Войти',
       submit: 'Войти',
+      form: {
+        username: 'Ваш ник',
+        password: 'Пароль',
+        confirmPassword: 'Подтвердите пароль',
+        submitBtn: 'Зарегистрироваться',
+      },
       noAccount: 'Нет аккаунта?',
       registration: 'Регистрация',
+      invalidUsernameOrPW: 'Неверные имя пользователя или пароль',
+    },
+    signup: {
+      title: 'Регистрация',
+      altSignupImg: 'Регистрация',
+      form: {
+        username: 'Имя пользователя',
+        password: 'Пароль',
+        confirmPassword: 'Подтвердите пароль',
+        submitBtn: 'Зарегистрироваться',
+        userAlreadyExists: 'Такой пользователь уже существует',
+      },
     },
     pageNotFound: {
       title: 'Страница не найдена',
@@ -44,6 +62,8 @@ export default {
       required: 'Обязательное поле',
       minmax: 'От 3 до 20 символов',
       channelAlreadyExists: 'Канал с таким именем уже существует',
+      min6: 'Не менее 6 символов',
+      mustMatch: 'Пароли должны совпадать',
     },
   },
 };
