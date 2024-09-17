@@ -61,9 +61,12 @@ export default {
     validation: {
       required: 'Обязательное поле',
       minmax: 'От 3 до 20 символов',
-      channelAlreadyExists: 'Канал с таким именем уже существует',
+      channelAlreadyExists: 'Должно быть уникальным',
       min6: 'Не менее 6 символов',
       mustMatch: 'Пароли должны совпадать',
+    },
+    notifications: {
+      channelCreated: 'Канал создан',
     },
   },
 };

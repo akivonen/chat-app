@@ -3,6 +3,7 @@ import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { useAddChannelMutation, useGetChannelsQuery } from '../../services';
 import actions from '../../store/slices/actions';
 import { getChannelSchema } from '../../validation';
@@ -22,14 +23,12 @@ const AddChannel = () => {
     },
     validationSchema: getChannelSchema(channelNames),
     onSubmit: async ({ name }) => {
-      try {
-        const newChannel = { name };
-        addChannel(newChannel);
-        formik.resetForm();
-        handleHide();
-      } catch (error) {
-        console.log(error);
-      }
+      formik.setSubmitting = true;
+      addChannel({ name });
+      toast.success('Success Notification !');
+      handleHide();
+      formik.setSubmitting = false;
+      formik.resetForm();
     },
   });
   useEffect(() => {
@@ -54,6 +53,7 @@ const AddChannel = () => {
               className="mb-2"
               required
               value={formik.values.name}
+              isInvalid={formik.errors.name}
             />
             <Form.Label htmlFor="name" className="visually-hidden">
               {t('modals.channelName')}
