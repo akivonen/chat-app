@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import actions from '../store/slices/actions';
 import { signUpSchema } from '../validation';
 import getRoute from '../routes';
@@ -40,11 +41,12 @@ const SignUpForm = () => {
         dispatch(actions.setCredentials(response.data));
         redirect();
       } catch (err) {
-        if (err.isAxiosError && err.response.status === 409) {
+        if (err.isAxiosError && err.code === 'ERR_NETWORK') {
+          toast.error(t('notifications.connectionError'));
+        } else if (err.isAxiosError && err.response.status === 409) {
           setSignUpfailed(true);
           usernameRef.current.select();
         }
-        throw err;
       } finally {
         formik.setSubmitting(false);
       }

@@ -1,43 +1,45 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { BsArrowRightSquare } from 'react-icons/bs';
 import { useTranslation } from 'react-i18next';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
-import Spinner from '../Spinner';
+import { toast } from 'react-toastify';
 import { useAddMessageMutation } from '../../services';
 
 const MessageForm = ({ activeChannelId }) => {
   const { t } = useTranslation();
   const { username } = useSelector((state) => state.auth);
-  const [addMessage, { error, isLoading }] = useAddMessageMutation();
+  const [addMessage] = useAddMessageMutation();
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const formik = useFormik({
     initialValues: {
       body: '',
     },
     onSubmit: async ({ body }, { setSubmitting }) => {
-      setSubmitting(true);
-      const newMessage = {
-        username,
-        body,
-        channelId: activeChannelId,
-      };
-      addMessage(newMessage);
-      formik.resetForm();
-      if (!isLoading) {
+      try {
+        setSubmitting(true);
+        const newMessage = {
+          username,
+          body,
+          channelId: activeChannelId,
+        };
+        await addMessage(newMessage).unwrap();
+        formik.resetForm();
+      } catch (err) {
+        toast.error(t('notifications.connectionError'));
+      } finally {
         setSubmitting(false);
       }
     },
   });
-
-  if (error) {
-    console.log(error);
-  }
-
-  if (isLoading) {
-    return <Spinner />;
-  }
 
   return (
     <div className="mt-auto px-5 py-3">
@@ -48,6 +50,7 @@ const MessageForm = ({ activeChannelId }) => {
             disabled={formik.isSubmitting}
             onBlur={formik.handleBlur}
             autoFocus
+            ref={inputRef}
             name="body"
             id="body"
             aria-label="Новое сообщение"

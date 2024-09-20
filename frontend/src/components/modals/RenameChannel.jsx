@@ -3,6 +3,7 @@ import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { useGetChannelsQuery, useUpdateChannelMutation } from '../../services';
 import actions from '../../store/slices/actions';
 import { getChannelSchema } from '../../validation';
@@ -27,11 +28,19 @@ const RenameChannel = () => {
     validationSchema: getChannelSchema(channelNames),
     onSubmit: async ({ name }) => {
       try {
+        formik.setSubmitting = true;
         const renamedChannel = { ...selectedChannel, name };
-        renameChannel(renamedChannel);
+        await renameChannel(renamedChannel).unwrap();
         handleHide();
-      } catch (error) {
-        console.log(error);
+        toast.success(t('notifications.channelRenamed'));
+      } catch (err) {
+        if (err.status === 'FETCH_ERROR') {
+          toast.error(t('notifications.connectionError'));
+          return;
+        }
+        toast.error(err.status);
+      } finally {
+        formik.setSubmitting = false;
       }
     },
   });

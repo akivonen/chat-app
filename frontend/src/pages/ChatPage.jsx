@@ -4,7 +4,11 @@ import Channels from '../components/chat/Channels.jsx';
 import Messages from '../components/chat/Messages.jsx';
 import ChannelModal from '../components/modals/Modal.jsx';
 import {
-  useAddChannelMutation, useDeleteChannelMutation, useGetChannelsQuery, useGetMessagesQuery,
+  useAddChannelMutation,
+  useAddMessageMutation,
+  useDeleteChannelMutation,
+  useGetChannelsQuery,
+  useGetMessagesQuery,
   useUpdateChannelMutation,
 } from '../services/index.js';
 import Spinner from '../components/Spinner.jsx';
@@ -13,12 +17,13 @@ const ChatPage = () => {
   const { isLoading: isGettingChannels } = useGetChannelsQuery();
   const { isLoading: isGettingMessages } = useGetMessagesQuery();
   const [{ isLoading: isAddingChannel }] = useAddChannelMutation();
+  const [{ isLoading: isAddingMessage }] = useAddMessageMutation();
   const [{ isLoading: isRemovingChannel }] = useDeleteChannelMutation();
   const [{ isLoading: isRenamingChannel }] = useUpdateChannelMutation();
 
   if (isGettingChannels || isGettingMessages
     || isAddingChannel || isRemovingChannel
-    || isRenamingChannel) {
+    || isRenamingChannel || isAddingMessage) {
     return <Spinner />;
   }
 

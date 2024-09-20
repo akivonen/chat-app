@@ -34,15 +34,8 @@ const Channel = ({ channel }) => {
   return (
     <Nav.Item className="w-100" as="li">
       {
-        !removable
+        removable
           ? (
-            <ChannelButton
-              name={name}
-              handleChangeChannel={handleChangeChannel}
-              isActiveChannel={isActiveChannel}
-            />
-          )
-          : (
             <Dropdown className="d-flex" as={ButtonGroup}>
               <ChannelButton
                 name={name}
@@ -57,6 +50,13 @@ const Channel = ({ channel }) => {
                 <Dropdown.Item onClick={openRenameChannelModal}>{t('channels.rename')}</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+          )
+          : (
+            <ChannelButton
+              name={name}
+              handleChangeChannel={handleChangeChannel}
+              isActiveChannel={isActiveChannel}
+            />
           )
       }
     </Nav.Item>

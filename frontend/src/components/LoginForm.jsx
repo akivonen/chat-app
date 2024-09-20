@@ -4,6 +4,7 @@ import { Form, FloatingLabel, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import getRoute from '../routes';
 
@@ -38,12 +39,12 @@ const LoginForm = () => {
         dispatch(actions.setCredentials(response.data));
         redirect();
       } catch (err) {
-        if (err.isAxiosError && err.response.status === 401) {
+        if (err.isAxiosError && err.code === 'ERR_NETWORK') {
+          toast.error(t('notifications.connectionError'));
+        } else if (err.isAxiosError && err.response.status === 401) {
           setAuthFailed(true);
           usernameRef.current.select();
-          return;
         }
-        throw err;
       } finally {
         formik.setSubmitting(false);
       }

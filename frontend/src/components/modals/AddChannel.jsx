@@ -23,12 +23,21 @@ const AddChannel = () => {
     },
     validationSchema: getChannelSchema(channelNames),
     onSubmit: async ({ name }) => {
-      formik.setSubmitting = true;
-      addChannel({ name });
-      toast.success('Success Notification !');
-      handleHide();
-      formik.setSubmitting = false;
-      formik.resetForm();
+      try {
+        formik.setSubmitting = true;
+        await addChannel({ name }).unwrap();
+        formik.resetForm();
+        handleHide();
+        toast.success(t('notifications.channelCreated'));
+      } catch (err) {
+        if (err.status === 'FETCH_ERROR') {
+          toast.error(t('notifications.connectionError'));
+          return;
+        }
+        toast.error(err.status);
+      } finally {
+        formik.setSubmitting = false;
+      }
     },
   });
   useEffect(() => {
