@@ -17,13 +17,18 @@ const ChatPage = () => {
   const { isLoading: isGettingChannels } = useGetChannelsQuery();
   const { isLoading: isGettingMessages } = useGetMessagesQuery();
   const [{ isLoading: isAddingChannel }] = useAddChannelMutation();
-  const [{ isLoading: isAddingMessage }] = useAddMessageMutation();
+  const [{ isLoading: isAddingMessages }] = useAddMessageMutation();
   const [{ isLoading: isRemovingChannel }] = useDeleteChannelMutation();
   const [{ isLoading: isRenamingChannel }] = useUpdateChannelMutation();
 
-  if (isGettingChannels || isGettingMessages
-    || isAddingChannel || isRemovingChannel
-    || isRenamingChannel || isAddingMessage) {
+  const isLoading = [
+    isGettingChannels,
+    isGettingMessages,
+    isAddingChannel,
+    isRemovingChannel,
+    isRenamingChannel,
+    isAddingMessages].some(Boolean);
+  if (isLoading) {
     return <Spinner />;
   }
 

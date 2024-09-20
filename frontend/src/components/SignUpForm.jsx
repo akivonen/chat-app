@@ -33,10 +33,10 @@ const SignUpForm = () => {
     },
     validationSchema: signUpSchema,
     onSubmit: async ({ username, password }) => {
+      setSignUpfailed(false);
+      formik.setSubmitting(true);
+      const newUser = { username, password };
       try {
-        const newUser = { username, password };
-        setSignUpfailed(false);
-        formik.setSubmitting(true);
         const response = await axios.post(getRoute.singUpPath(), newUser);
         dispatch(actions.setCredentials(response.data));
         redirect();

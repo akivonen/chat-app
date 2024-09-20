@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import leoProfanity from 'leo-profanity';
 import { useAddChannelMutation, useGetChannelsQuery } from '../../services';
 import actions from '../../store/slices/actions';
 import { getChannelSchema } from '../../validation';
@@ -23,9 +24,15 @@ const AddChannel = () => {
     },
     validationSchema: getChannelSchema(channelNames),
     onSubmit: async ({ name }) => {
+      formik.setSubmitting = true;
+      const filteredName = leoProfanity.clean(name);
+      if (channelNames.includes(filteredName)) {
+        formik.setFieldError('name', t('validation.channelAlreadyExists'));
+        formik.setSubmitting = false;
+        return;
+      }
       try {
-        formik.setSubmitting = true;
-        await addChannel({ name }).unwrap();
+        await addChannel({ name: filteredName }).unwrap();
         formik.resetForm();
         handleHide();
         toast.success(t('notifications.channelCreated'));

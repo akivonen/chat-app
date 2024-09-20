@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import leoProfanity from 'leo-profanity';
 import { useGetChannelsQuery, useUpdateChannelMutation } from '../../services';
 import actions from '../../store/slices/actions';
 import { getChannelSchema } from '../../validation';
@@ -27,9 +28,15 @@ const RenameChannel = () => {
     },
     validationSchema: getChannelSchema(channelNames),
     onSubmit: async ({ name }) => {
+      formik.setSubmitting = true;
+      const filteredName = leoProfanity.clean(name);
+      if (channelNames.includes(filteredName)) {
+        formik.setFieldError('name', t('validation.channelAlreadyExists'));
+        formik.setSubmitting = false;
+        return;
+      }
+      const renamedChannel = { ...selectedChannel, name: filteredName };
       try {
-        formik.setSubmitting = true;
-        const renamedChannel = { ...selectedChannel, name };
         await renameChannel(renamedChannel).unwrap();
         handleHide();
         toast.success(t('notifications.channelRenamed'));

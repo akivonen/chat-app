@@ -5,6 +5,7 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import leoProfanity from 'leo-profanity';
 import { useAddMessageMutation } from '../../services';
 
 const MessageForm = ({ activeChannelId }) => {
@@ -24,13 +25,14 @@ const MessageForm = ({ activeChannelId }) => {
       body: '',
     },
     onSubmit: async ({ body }, { setSubmitting }) => {
+      setSubmitting(true);
+      const filteredMessage = leoProfanity.clean(body);
+      const newMessage = {
+        username,
+        body: filteredMessage,
+        channelId: activeChannelId,
+      };
       try {
-        setSubmitting(true);
-        const newMessage = {
-          username,
-          body,
-          channelId: activeChannelId,
-        };
         await addMessage(newMessage).unwrap();
         formik.resetForm();
       } catch (err) {
