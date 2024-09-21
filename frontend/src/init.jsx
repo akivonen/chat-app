@@ -6,15 +6,7 @@ import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import App from './components/App';
 import resources from './locales/index.js';
 import store from './store/index';
-
-const rollbarConfig = {
-  accessToken: 'c01132175b194df485745d94d6433c54',
-  environment: 'testenv',
-};
-function TestError() {
-  const a = null;
-  return a.hello();
-}
+import rollbarConfig from './rollbarConfig.js';
 
 const init = async () => {
   const i18n = i18next.createInstance();
@@ -27,7 +19,7 @@ const init = async () => {
     });
 
   return (
-    <RollbarProvider rollbarConfig={rollbarConfig}>
+    <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
         <Provider store={store}>
           <BrowserRouter>
@@ -36,7 +28,6 @@ const init = async () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-        <TestError />
       </ErrorBoundary>
     </RollbarProvider>
   );
