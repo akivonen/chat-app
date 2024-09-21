@@ -1,5 +1,9 @@
 import * as Yup from 'yup';
 
+const messageSchema = Yup.object().shape({
+  body: Yup.string().trim().required('Required'),
+});
+
 const loginSchema = Yup.object({
   username: Yup.string().required(),
   password: Yup.string().required(),
@@ -34,4 +38,6 @@ const getChannelSchema = (channelNames) => Yup.object({
     .notOneOf(channelNames, 'validation.channelAlreadyExists'),
 });
 
-export { loginSchema, signUpSchema, getChannelSchema };
+export {
+  messageSchema, loginSchema, signUpSchema, getChannelSchema,
+};

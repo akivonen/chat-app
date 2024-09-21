@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 import { useAddMessageMutation } from '../../services';
+import { messageSchema } from '../../validation';
 
 const MessageForm = ({ activeChannelId }) => {
   const { t } = useTranslation();
@@ -24,6 +25,7 @@ const MessageForm = ({ activeChannelId }) => {
     initialValues: {
       body: '',
     },
+    validationSchema: messageSchema,
     onSubmit: async ({ body }, { setSubmitting }) => {
       setSubmitting(true);
       const filteredMessage = leoProfanity.clean(body);
