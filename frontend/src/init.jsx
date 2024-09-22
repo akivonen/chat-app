@@ -18,16 +18,10 @@ const init = async () => {
       fallbackLng: 'ru',
     });
 
-  function TestError() {
-    const a = null;
-    return a.hello();
-  }
-
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
         <Provider store={store}>
-          <TestError />
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <App />
