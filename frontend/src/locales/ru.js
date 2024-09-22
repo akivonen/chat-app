@@ -68,6 +68,7 @@ export default {
     notifications: {
       channelCreated: 'Канал создан',
       channelRenamed: 'Канал переименован',
+      channelDeleted: 'Канал удалён',
       connectionError: 'Ошибка соединения',
     },
   },
