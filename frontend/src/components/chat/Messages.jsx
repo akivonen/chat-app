@@ -12,9 +12,9 @@ const Messages = () => {
   const { data: messageList } = useGetMessagesQuery();
   const activeChannelId = useSelector((state) => state.ui.channels.activeChannelId);
   const activeChannel = channelsList
-    .find((c) => c.id === activeChannelId);
+    ?.find((c) => c.id === activeChannelId);
   const activeChannelMsgs = messageList
-    .filter((m) => m.channelId === activeChannelId);
+    ?.filter((m) => m.channelId === activeChannelId);
   if (!activeChannel || !activeChannelMsgs) {
     return <Spinner />;
   }
