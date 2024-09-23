@@ -17,7 +17,7 @@ const RemoveChannel = () => {
     try {
       await removeChannel(channelId).unwrap();
       handleHide();
-      toast.success(t('notifications.channelRenamed'));
+      toast.success(t('notifications.channelDeleted'));
     } catch (err) {
       if (err.status === 'FETCH_ERROR') {
         toast.error(t('notifications.connectionError'));
