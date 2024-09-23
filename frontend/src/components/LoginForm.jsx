@@ -3,11 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Form, FloatingLabel, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import getRoute from '../routes';
 import actions from '../store/slices/actions';
 import { loginSchema } from '../validation';
-import authFormHandler from '../helpers/authFormHandler';
 
 const initialValues = {
   username: '',
@@ -24,26 +25,29 @@ const LoginForm = () => {
   useEffect(() => {
     usernameRef.current.select();
   }, []);
-  const redirect = () => {
-    const { from } = location.state;
-    navigate(from);
-  };
+
   const formik = useFormik({
     initialValues,
     validationSchema: loginSchema,
-    onSubmit:
-    (values) => authFormHandler(
-      values,
-      setAuthFailed,
-      formik,
-      getRoute.loginPath(),
-      dispatch,
-      usernameRef,
-      t,
-      actions.setCredentials,
-      redirect,
-      '401',
-    ),
+    onSubmit: async ({ username, password }) => {
+      setAuthFailed(false);
+      formik.setSubmitting(true);
+      try {
+        const response = await axios.post(getRoute.loginPath(), { username, password });
+        dispatch(actions.setCredentials(response.data));
+        const { from } = location.state;
+        navigate(from);
+      } catch (err) {
+        if (err.isAxiosError && err.code === 'ERR_NETWORK') {
+          toast.error(t('notifications.connectionError'));
+        } else if (err.isAxiosError && err.response.status === 401) {
+          setAuthFailed(true);
+          usernameRef.current.select();
+        }
+      } finally {
+        formik.setSubmitting(false);
+      }
+    },
   });
   return (
     <Form
