@@ -8,6 +8,7 @@ import {
   LoginPage, PageNotFound, ChatPage, SignUpPage,
 } from '../pages/index';
 import Spinner from './Spinner';
+import getRoute from '../routes';
 
 const PrivateRoute = ({ children }) => {
   const authState = useSelector((state) => state.auth);
@@ -19,7 +20,7 @@ const PrivateRoute = ({ children }) => {
   return (
     authState.token
       ? children
-      : <Navigate to="/login" state={{ from: location }} />
+      : <Navigate to={getRoute.loginPath()} state={{ from: location }} />
   );
 };
 
@@ -36,8 +37,8 @@ const App = () => (
             </PrivateRoute>
           )}
         />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
+        <Route path={getRoute.loginPath()} element={<LoginPage />} />
+        <Route path={getRoute.singUpPath()} element={<SignUpPage />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>

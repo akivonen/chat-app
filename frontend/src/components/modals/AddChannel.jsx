@@ -3,11 +3,10 @@ import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import leoProfanity from 'leo-profanity';
 import { useAddChannelMutation, useGetChannelsQuery } from '../../services';
 import actions from '../../store/slices/actions';
 import { getChannelSchema } from '../../validation';
+import channelFormHandler from '../../helpers/channelFormHandler';
 
 const AddChannel = () => {
   const isOpened = useSelector((state) => state.ui.modals.isOpened);
@@ -23,29 +22,8 @@ const AddChannel = () => {
       name: '',
     },
     validationSchema: getChannelSchema(channelNames),
-    onSubmit: async ({ name }) => {
-      formik.setSubmitting = true;
-      const filteredName = leoProfanity.clean(name);
-      if (channelNames.includes(filteredName)) {
-        formik.setFieldError('name', t('validation.channelAlreadyExists'));
-        formik.setSubmitting = false;
-        return;
-      }
-      try {
-        await addChannel({ name: filteredName }).unwrap();
-        formik.resetForm();
-        handleHide();
-        toast.success(t('notifications.channelCreated'));
-      } catch (err) {
-        if (err.status === 'FETCH_ERROR') {
-          toast.error(t('notifications.connectionError'));
-          return;
-        }
-        toast.error(err.status);
-      } finally {
-        formik.setSubmitting = false;
-      }
-    },
+    onSubmit:
+    (values) => channelFormHandler(values, formik, channelNames, addChannel, handleHide, t, 'notifications.channelCreated'),
   });
   useEffect(() => {
     if (inputRef.current) {
@@ -79,7 +57,7 @@ const AddChannel = () => {
             </Form.Control.Feedback>
             <div className="d-flex justify-content-end">
               <Button onClick={handleHide} variant="secondary" className="me-2">{t('modals.cancel')}</Button>
-              <Button variant="primary" type="submit">{t('modals.send')}</Button>
+              <Button variant="primary" type="submit" disabled={formik.isSubmitting}>{t('modals.send')}</Button>
             </div>
           </Form.Group>
         </Form>

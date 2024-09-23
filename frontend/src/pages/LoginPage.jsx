@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Container, Card } from 'react-bootstrap';
 import loginImg from '../assets/login.jpg';
 import LoginPageForm from '../components/LoginForm';
+import getRoute from '../routes';
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -19,11 +20,8 @@ const LoginPage = () => {
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>
-                  {t('login.noAccount')}
-                  {' '}
-                </span>
-                <a href="/signup">{t('login.registration')}</a>
+                <span>{`${t('login.noAccount')} `}</span>
+                <a href={getRoute.singUpPath()}>{t('login.registration')}</a>
               </div>
             </Card.Footer>
           </Card>

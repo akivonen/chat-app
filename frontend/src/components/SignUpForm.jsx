@@ -10,6 +10,12 @@ import actions from '../store/slices/actions';
 import { signUpSchema } from '../validation';
 import getRoute from '../routes';
 
+const initialValues = {
+  username: '',
+  password: '',
+  confirmPassword: '',
+};
+
 const SignUpForm = () => {
   const { t } = useTranslation();
   const [signUpFailed, setSignUpfailed] = useState(false);
@@ -17,6 +23,7 @@ const SignUpForm = () => {
   const usernameRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
+
   useEffect(() => {
     usernameRef.current.focus();
   }, []);
@@ -26,18 +33,13 @@ const SignUpForm = () => {
   };
 
   const formik = useFormik({
-    initialValues: {
-      username: '',
-      password: '',
-      confirmPassword: '',
-    },
+    initialValues,
     validationSchema: signUpSchema,
     onSubmit: async ({ username, password }) => {
       setSignUpfailed(false);
       formik.setSubmitting(true);
-      const newUser = { username, password };
       try {
-        const response = await axios.post(getRoute.singUpPath(), newUser);
+        const response = await axios.post(getRoute.singUpPath(), { username, password });
         dispatch(actions.setCredentials(response.data));
         redirect();
       } catch (err) {

@@ -7,8 +7,7 @@ const Spinner = () => {
   return (
     <SpinnerBS variant="primary" animation="border" role="status">
       <span className="visually-hidden">
-        {t('status.loading')}
-        ...
+        {`${t('status.loading')}...`}
       </span>
     </SpinnerBS>
   );
