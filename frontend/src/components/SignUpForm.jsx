@@ -4,11 +4,10 @@ import { Form, FloatingLabel, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 import actions from '../store/slices/actions';
 import { signUpSchema } from '../validation';
 import getRoute from '../routes';
+import authFormHandler from '../helpers/authFormHandler';
 
 const initialValues = {
   username: '',
@@ -35,24 +34,19 @@ const SignUpForm = () => {
   const formik = useFormik({
     initialValues,
     validationSchema: signUpSchema,
-    onSubmit: async ({ username, password }) => {
-      setSignUpfailed(false);
-      formik.setSubmitting(true);
-      try {
-        const response = await axios.post(getRoute.singUpPath(), { username, password });
-        dispatch(actions.setCredentials(response.data));
-        redirect();
-      } catch (err) {
-        if (err.isAxiosError && err.code === 'ERR_NETWORK') {
-          toast.error(t('notifications.connectionError'));
-        } else if (err.isAxiosError && err.response.status === 409) {
-          setSignUpfailed(true);
-          usernameRef.current.select();
-        }
-      } finally {
-        formik.setSubmitting(false);
-      }
-    },
+    onSubmit:
+    (values) => authFormHandler(
+      values,
+      setSignUpfailed,
+      formik,
+      getRoute.singUpPath(),
+      dispatch,
+      usernameRef,
+      t,
+      actions.setCredentials,
+      redirect,
+      '409',
+    ),
   });
   return (
     <Form
