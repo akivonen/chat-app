@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Form, FloatingLabel, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import axios from 'axios';
@@ -56,38 +56,36 @@ const LoginForm = () => {
     >
       <h1 className="text-center mb-4">{t('login.title')}</h1>
       <Form.Group className="form-floating mb-3">
-        <FloatingLabel label={t('login.form.username')}>
-          <Form.Control
-            type="text"
-            name="username"
-            id="username"
-            ref={usernameRef}
-            isInvalid={authFailed}
-            autoComplete="username"
-            placeholder={t('login.form.username')}
-            required
-            onChange={formik.handleChange}
-            value={formik.values.username}
-          />
-        </FloatingLabel>
+        <Form.Control
+          type="text"
+          name="username"
+          id="username"
+          ref={usernameRef}
+          isInvalid={authFailed}
+          autoComplete="username"
+          placeholder={t('login.form.username')}
+          required
+          onChange={formik.handleChange}
+          value={formik.values.username}
+        />
+        <Form.Label htmlFor="username">{t('login.form.username')}</Form.Label>
       </Form.Group>
       <Form.Group className="form-floating mb-4">
-        <FloatingLabel label={t('login.form.password')}>
-          <Form.Control
-            type="password"
-            name="password"
-            id="password"
-            isInvalid={authFailed}
-            autoComplete="current-password"
-            placeholder={t('login.form.password')}
-            required
-            onChange={formik.handleChange}
-            value={formik.values.password}
-          />
-          <Form.Control.Feedback type="invalid">
-            {t('login.invalidUsernameOrPW')}
-          </Form.Control.Feedback>
-        </FloatingLabel>
+        <Form.Control
+          type="password"
+          name="password"
+          id="password"
+          isInvalid={authFailed}
+          autoComplete="current-password"
+          placeholder={t('login.form.password')}
+          required
+          onChange={formik.handleChange}
+          value={formik.values.password}
+        />
+        <Form.Label htmlFor="password">{t('login.form.password')}</Form.Label>
+        <Form.Control.Feedback type="invalid">
+          {t('login.invalidUsernameOrPW')}
+        </Form.Control.Feedback>
       </Form.Group>
       <Button
         type="submit"
