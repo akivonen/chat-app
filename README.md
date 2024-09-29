@@ -33,3 +33,11 @@ This app is Slack chat clone (a very simplified version).
 - Form Management: handling complex form logic, validation, and state management using Formik
 - Layout with React-Bootstrap: building responsive layouts using Bootstrap components within React via React-Bootstrap
 - Error catching, handling and monitoring with Rollbar: catchng and handling errors within application, monitoring and tracking production errors using Rollbar
+### Installation
+```
+git clone https://github.com/akivonen/chat-app.git
+#Install dependencies
+make install
+#Run
+make start
+```
