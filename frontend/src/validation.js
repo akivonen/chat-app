@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 const messageSchema = Yup.object().shape({
-  body: Yup.string().trim().required('Required'),
+  body: Yup.string().trim().required(),
 });
 
 const loginSchema = Yup.object({

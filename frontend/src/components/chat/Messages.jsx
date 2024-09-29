@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import Message from './Message';
@@ -11,10 +11,15 @@ const Messages = () => {
   const { data: channelsList } = useGetChannelsQuery();
   const { data: messageList } = useGetMessagesQuery();
   const activeChannelId = useSelector((state) => state.ui.channels.activeChannelId);
+  const messagesContainer = useRef(null);
   const activeChannel = channelsList
     ?.find((c) => c.id === activeChannelId);
   const activeChannelMsgs = messageList
     ?.filter((m) => m.channelId === activeChannelId);
+
+  useEffect(() => {
+    messagesContainer.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+  }, [activeChannelMsgs]);
   if (!activeChannel || !activeChannelMsgs) {
     return <Spinner />;
   }
@@ -26,7 +31,7 @@ const Messages = () => {
           <p className="m-0"><b>{`# ${activeChannel?.name}`}</b></p>
           <span className="text-muted">{t('messages.messages', { count: activeChannelMsgs.length || 0 })}</span>
         </div>
-        <div id="messages-box" className="chat-messages overflow-auto px-5 ">
+        <div ref={messagesContainer} id="messages-box" className="chat-messages overflow-auto px-5 ">
           { activeChannelMsgs.length > 0
             && activeChannelMsgs.map((m) => (
               <Message key={m.id} message={m} />

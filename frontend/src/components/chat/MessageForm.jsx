@@ -15,12 +15,6 @@ const MessageForm = ({ activeChannelId }) => {
   const [addMessage] = useAddMessageMutation();
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
-
   const formik = useFormik({
     initialValues: {
       body: '',
@@ -45,6 +39,12 @@ const MessageForm = ({ activeChannelId }) => {
     },
   });
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [activeChannelId, formik.isSubmitting]);
+
   return (
     <div className="mt-auto px-5 py-3">
       <Form onSubmit={formik.handleSubmit} noValidate className="py-1 border rounded-2">
@@ -65,7 +65,7 @@ const MessageForm = ({ activeChannelId }) => {
           <Button
             variant="group-vertical"
             type="submit"
-            disabled=""
+            disabled={formik.isSubmitting}
             aria-label={t('message.send')}
           >
             <BsArrowRightSquare size="20" />
