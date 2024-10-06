@@ -22,7 +22,7 @@ This app is Slack chat clone (a very simplified version).
 ### Learned Skills
 - React (with Hooks): building modern React applications using hooks
 - State Management Redux Toolkit: mnaging application-wide state using Redux Toolkit
-- REST API Interaction: шnteracting with RESTful APIs, making HTTP requests, and handling responses
+- REST API Interaction: interacting with RESTful APIs, making HTTP requests, and handling responses
 - WebSockets: working with WebSockets for real-time communication
 - Client-Side Routing: implementing client-side routing with React Router
 - Authorization and Authentication: managing user authentication and authorization processes
