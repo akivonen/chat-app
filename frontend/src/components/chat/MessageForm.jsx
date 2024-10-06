@@ -57,8 +57,8 @@ const MessageForm = ({ activeChannelId }) => {
             ref={inputRef}
             name="body"
             id="body"
-            aria-label="Новое сообщение"
-            placeholder="Введите сообщение..."
+            aria-label={t('messages.newMessage')}
+            placeholder={t('messages.enterMessage')}
             className="border-0 p-0 ps-2 form-control"
             value={formik.values.body}
           />

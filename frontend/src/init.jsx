@@ -15,7 +15,7 @@ const init = async () => {
     .use(initReactI18next)
     .init({
       resources,
-      fallbackLng: 'ru',
+      fallbackLng: 'en',
     });
 
   return (

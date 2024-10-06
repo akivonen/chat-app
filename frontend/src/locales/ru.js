@@ -40,9 +40,12 @@ export default {
       rename: 'Переименовать',
     },
     messages: {
+      messages_zero: '{{count}} сообщений',
       messages_one: '{{count}} сообщений',
       messages_few: '{{count}} сообщения',
       messages_many: '{{count}} сообщений',
+      newMessage: 'Новое сообщение',
+      enterMessage: 'Введите сообщение...',
       send: 'Отправить',
     },
     status: {
